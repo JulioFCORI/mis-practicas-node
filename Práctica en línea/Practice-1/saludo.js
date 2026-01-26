@@ -2,4 +2,4 @@ function saludar(nombre){
     return `Hola ${nombre}!`;
 }
 
-module.export = saludar;
+module.exports = saludar;
