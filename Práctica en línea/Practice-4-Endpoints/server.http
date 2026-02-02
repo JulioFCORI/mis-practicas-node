@@ -1,0 +1,38 @@
+### 1. GET - Request the HTML Page
+# This is like visiting the site in Chrome
+GET http://localhost:3000/
+
+### -------------------------------------------
+
+### 2. GET - Request data from the API
+GET http://localhost:3000/
+
+### -------------------------------------------
+
+### 3. POST - Create new data
+POST http://localhost:3000/
+Content-Type: application/json
+
+{
+    "name": "New Item",
+    "description": "Sending data via POST"
+}
+
+### -------------------------------------------
+
+### 4. PUT - Update existing data
+PUT http://localhost:3000/
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "Updated Item Name"
+}
+
+### -------------------------------------------
+
+### 5. DELETE - Remove data
+DELETE http://localhost:3000/
+
+### Test a non-defined method
+PATCH  http://localhost:3000/

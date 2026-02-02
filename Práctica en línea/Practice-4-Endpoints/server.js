@@ -5,7 +5,7 @@ const server = http.createServer((req, res) => {
 
     res.setHeader("Content-Type", "aplication/json")
 
-    if (url = "/") {
+    if (url === "/") {
         switch (method) {
             case "GET":
                 res.statusCode = 200;
@@ -17,10 +17,10 @@ const server = http.createServer((req, res) => {
                 break;
             case "PUT":
                 res.statusCode = 200;
-                res.end(JSON.stringify({ message: "PUT Recursi actualizado (200)", }),);
+                res.end(JSON.stringify({ message: "PUT Recurso actualizado (200)", }),);
                 break;
             case "DELETE":
-                res.statusCode = 204;
+                res.statusCode = 200;
                 res.end(JSON.stringify({ message: "DELETE Recurso eliminado (204)" }));
                 break;
             default:
@@ -32,7 +32,9 @@ const server = http.createServer((req, res) => {
         res.statusCode = 404;
         res.end(JSON.stringify({error: "Ruta no encontrada"}))
     }
-    server.listen(3000, () => {
+    
+})
+
+server.listen(3000, () => {
         console.log("Servidor se esta ejecutando en el puerto 3000")
     })
-})
