@@ -1,0 +1,20 @@
+### 1. GET - Request the HTML Page
+# This is like visiting the site in Chrome
+GET http://localhost:3000/api/tasks
+
+### 2. Post Method
+# Add an task to the list
+POST http://localhost:3000/api/tasks
+Content-Type: application/json
+
+{
+    "desc": ""
+}
+### 3. Put Method
+# Rename a task
+PUT http://localhost:3000/api/tasks/1
+Content-Type: application/json
+
+{
+    "desc": "Lavar ropa"
+}
