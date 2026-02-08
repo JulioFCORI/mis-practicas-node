@@ -15,11 +15,29 @@ let tasks = [
 //Midleware
 app.use(express.json());
 
+const verificateArray = () => {
+    if(!tasks.length >= 0 || tasks === null || tasks === undefined){
+        return
+    }
+}
+
 app.get("/api/tasks",(req, res) => {
+    verificateArray();
+    res.json({tasks});
 
 });
 
 app.get("/api/tasks/:id",(req, res) => {
+    verificateArray();
+    const id = Number(req.params.id);
+    if(!Number.isInteger(id)) return;
+    if(id < 0) return;
+    const index = tasks.findIndex(i => i.id === id)
+    if( index === undefined) return;
+    const task = tasks[index];
+
+    res.json({task});
+
 
 });
 
