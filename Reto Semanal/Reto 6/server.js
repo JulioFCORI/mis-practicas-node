@@ -48,20 +48,21 @@ const verificateId = (req, res) => {
     if (index === -1) {
         throw new Error("Debes indicar un registro existente");
     };
-    return index;
+    const result = { index, id }
+    return result;
 }
 //Mostrar todos los datos
 app.get("/api/tasks", (req, res) => {
-    const tasks = verificateArray();
-    if (tasks === null) {
+    const array = verificateArray();
+    if (array === null) {
         res.status(400).json({ message: "La lista no existe" });
     }
     res.json({ tasks });
 });
 //Mostrar un solo dato
 app.get("/api/tasks/:id", (req, res) => {
-    const tasks = verificateArray();
-    if (tasks === null) {
+    const array = verificateArray();
+    if (array === null) {
         res.status(400).json({ message: "La lista no existe" });
     }
 
@@ -80,6 +81,10 @@ app.get("/api/tasks/:id", (req, res) => {
 
 //Crear un nuevo registro
 app.post("/api/tasks", (req, res) => {
+    const array = verificateArray();
+    if (array === null) {
+        res.status(400).json({ message: "La lista no existe" });
+    }
     try {
         const desc = verificateContent(req, res);
         const newTask = {
@@ -99,17 +104,18 @@ app.post("/api/tasks", (req, res) => {
 
 // Modificar una tarea
 app.put("/api/tasks/:id", (req, res) => {
-    const tasks = verificateArray();
-    if (tasks === null) {
+    const array = verificateArray();
+    if (array === null) {
         res.status(400).json({ message: "La lista no existe" });
     }
 
     try {
 
-        const index = verificateId(req, res);
+        const result = verificateId(req, res);
+        console.log("Me ejecute con exito 1")
         const desc = verificateContent(req, res);
-        tasks[index].des = desc;
-        const task = task[index];
+        tasks[result.index].des = desc;
+        const task = tasks[result.index];
 
 
         res.json({ task });
@@ -120,6 +126,18 @@ app.put("/api/tasks/:id", (req, res) => {
 });
 
 app.delete("/api/tasks/:id", (req, res) => {
+    const array = verificateArray();
+    if (array === null) {
+        res.status(400).json({ message: "La lista no existe" });
+    }
+
+    try {
+        const result = verificateId(req, res);
+        tasks = tasks.filter(task => task.id !== result.id);
+        res.json({ message: "Tarea borrada con exito" });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 
 });
 

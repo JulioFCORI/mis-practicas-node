@@ -8,13 +8,18 @@ POST http://localhost:3000/api/tasks
 Content-Type: application/json
 
 {
-    "desc": ""
+    "desc": "Hola Mundo"
 }
 ### 3. Put Method
 # Rename a task
-PUT http://localhost:3000/api/tasks/1
+PUT http://localhost:3000/api/tasks/3
 Content-Type: application/json
 
 {
-    "desc": "Lavar ropa"
+    "desc": "Hola Hi"
 }
+
+### 4. Delete Method
+# Delete a task
+
+DELETE  http://localhost:3000/api/tasks/2
