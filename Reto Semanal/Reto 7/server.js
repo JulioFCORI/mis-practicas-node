@@ -42,11 +42,37 @@ const app = express();
 app.use(express.json());
 
 //Aditional Functions
+//Verify if the array exists
 const verifyArray = () => {
     if (notes.length === null || notes.length === undefined || notes.length < 0) {
         return null;
     }
     return notes;
+}
+
+//Verify if exist title
+const verifyTitle = (title) => {
+    if (!title) {
+        return { data: null, message: "El título es obligatorio" }
+    }
+    const titleTrimed = title.trim();
+    if (titleTrimed === "" || titleTrimed === null || titleTrimed === undefined) {
+
+        return { data: null, message: "El título no puede estar vacio" }
+    }
+
+    return { data: titleTrimed, message: "El titulo se agrego correctamente" }
+}
+
+const verifyDesc = (desc) => {
+    if (!desc) {
+        return { data: null, message: "Debe existir una descripción" }
+    }
+    const descTrimed = desc.trim();
+    if (descTrimed === "" || descTrimed === null || descTrimed === undefined || descTrimed.length < 10) {
+        return { data: null, message: "El contenido debe tener al menos 10 caracteres" }
+    }
+    return { data: descTrimed, message: "La descripción se agrego correctamente" }
 }
 
 //Methods
@@ -65,36 +91,42 @@ app.post("/notes", (req, res) => {
     const listNote = verifyArray();
     if (listNote === null) {
         res.status(400).json({ message: "No existe la lista que esta intentado llamar" });
+        return
     }
+
+
     const { title, desc } = req.body;
-    if (!title) {
-        res.status(400).json({ error: "El título es obligatorio" });
-        return
+    const resultTitle = verifyTitle(title);
+    const resultDesc = verifyDesc(desc);
+
+    if (resultTitle.data === null) {
+        res.status(400).json({ error: resultTitle.message });
+        return;
     }
-    const titleTrimed = title.trim();
-    if (titleTrimed === "" || titleTrimed === null || titleTrimed === undefined) {
-        res.status(400).json({ error: "El título no puede estar vacio" });
-        return
-    }
-    if(!desc){
-                res.status(400).json({ error: "Debe existir una descripción" });
-                return
-    }
-    const descTrimed = desc.trim();
-    if (descTrimed === "" || descTrimed === null || descTrimed === undefined || descTrimed.length < 10) {
-        res.status(400).json({ error: "El contenido debe tener al menos 10 caracteres" });
-        return
+
+    if (resultDesc.data === null) {
+        res.status(400).json({ error: resultDesc.message });
+        return;
     }
 
     const newNote = {
-        id: (notes[notes.length - 1].id)+1,
-        title: titleTrimed,
-        desc: descTrimed
+        id: (notes[notes.length - 1].id) + 1,
+        title: resultTitle.data,
+        desc: resultDesc.data
     }
     notes.push(newNote);
-    res.status(201).json({message: "La nota se agrego con exito."})
+    res.status(201).json({ message: "La nota se agrego con exito." })
 })
 
+//PUT Method
+app.put("/notes/:id", () => {
+    const listNote = verifyArray();
+    if (listNote === null) {
+        res.status(400).json({ message: "No existe la lista que esta intentado llamar" });
+    }
+
+
+});
 //===================================================================================================================================
 //Listening server
 app.listen(3000, () => {

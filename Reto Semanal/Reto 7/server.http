@@ -8,12 +8,12 @@ POST http://localhost:3000/notes
 Content-Type: application/json
 
 {
-    "title": "Abastecimientos",
-    "desc": "      Entregar Suministros Vad           "
+    "title": "     Estudiar C#    ",
+    "desc": "      Registrarme en el server de Disco C#        "
 }
 ### 3. Put Method
 # Rename a task
-PUT http://localhost:3000/api/tasks/3
+PUT http://localhost:3000/api/tasks
 Content-Type: application/json
 
 {
