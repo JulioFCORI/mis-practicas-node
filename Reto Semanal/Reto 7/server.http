@@ -1,0 +1,26 @@
+### 1. GET - Request the HTML Page
+# This is like visiting the site in Chrome
+GET http://localhost:3000/notes
+
+### 2. Post Method
+# Add an task to the list
+POST http://localhost:3000/notes
+Content-Type: application/json
+
+{
+    "title": "Abastecimientos",
+    "desc": "      Entregar Suministros Vad           "
+}
+### 3. Put Method
+# Rename a task
+PUT http://localhost:3000/api/tasks/3
+Content-Type: application/json
+
+{
+    "desc": "Hola Hi"
+}
+
+### 4. Delete Method
+# Delete a task
+
+DELETE  http://localhost:3000/api/tasks/2
