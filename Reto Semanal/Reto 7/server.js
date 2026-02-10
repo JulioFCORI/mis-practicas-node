@@ -119,11 +119,45 @@ app.post("/notes", (req, res) => {
 })
 
 //PUT Method
-app.put("/notes/:id", () => {
+app.put("/notes/:id", (req, res) => {
     const listNote = verifyArray();
     if (listNote === null) {
         res.status(400).json({ message: "No existe la lista que esta intentado llamar" });
+        return;
     }
+
+    let id = req.params.id;
+
+    const { title, desc } = req.body;
+    if (title === undefined && desc === undefined) {
+        res.status(400).json({ message: "Debes ingresar almenos un titulo diferente o una descripción diferente para la nota" });
+        return;
+    }
+    if (title !== undefined && desc === undefined) {
+        const resultTitle = verifyTitle(title);
+        if (resultTitle.data === null) {
+            return res.status(400).json({ error: resultTitle.message });
+        }
+
+        return
+        
+
+    };
+    if (title === undefined && desc !== undefined) {
+
+    };
+    if (title !== undefined && desc !== undefined) {
+
+    }
+    const resultDesc = verifyDesc(desc);
+
+
+
+    if (resultDesc.data === null) {
+        res.status(400).json({ error: resultDesc.message });
+        return;
+    }
+
 
 
 });
