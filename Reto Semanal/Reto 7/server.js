@@ -75,6 +75,21 @@ const verifyDesc = (desc) => {
     return { data: descTrimed, message: "La descripción se agrego correctamente" }
 }
 
+//Verify id
+const verifyId = (id)=>{
+    if(!id){
+        return {data:null, message: "El id debe proporcionarse"};
+    }
+    const trimmedId = String(id).trim();
+    if(trimmedId === ""){
+        return {data: null, message: "El valor del id no puede ser un espacio vacio"};
+    }
+    const idNumber = Number(trimmedId);
+    if(!Number.isInteger(idNumber)){
+        return {data:null, message: "El id debe ser un número entero"}
+    }
+    return {data: idNumber, message: "Id pasado correctamenet"};
+}
 //Methods
 //===================================================================================================================================
 //GET Show the complete listOfNotes.json
@@ -120,26 +135,32 @@ app.post("/notes", (req, res) => {
 
 //PUT Method
 app.put("/notes/:id", (req, res) => {
+    //Verify Array
     const listNote = verifyArray();
     if (listNote === null) {
         res.status(400).json({ message: "No existe la lista que esta intentado llamar" });
         return;
     }
-
+    //Verify and Bring ID
     let id = req.params.id;
-
-    const { title, desc } = req.body;
-    if (title === undefined && desc === undefined) {
-        res.status(400).json({ message: "Debes ingresar almenos un titulo diferente o una descripción diferente para la nota" });
-        return;
+    const obtainId = verifyId(id);
+    if(obtainId === null){
+        return res.status(404).json({message: obtainId.message});
     }
+    // Bring title and desc
+    const { title, desc } = req.body;
+    const obtainTitle = verifyTitle(title);
+    const obtainDesc = verifyDesc(desc);
+    if(title === undefined && desc === undefined){
+        return res.status(400).json({message: "Debe agregarse almenos una descripció o titulo a cambiar"});
+    };
+
     if (title !== undefined && desc === undefined) {
-        const resultTitle = verifyTitle(title);
-        if (resultTitle.data === null) {
+        if (obtainTitle.data === null) {
             return res.status(400).json({ error: resultTitle.message });
         }
-
-        return
+        
+        return 
         
 
     };
