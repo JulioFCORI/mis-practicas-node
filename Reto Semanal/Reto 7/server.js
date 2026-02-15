@@ -101,7 +101,7 @@ const verifyId = (id) => {
   if (!Number.isInteger(idNumber)) {
     return { data: null, message: "El id debe ser un número entero" };
   }
-  return { data: idNumber, message: "Id pasado correctamenet" };
+  return { data: idNumber, message: "Id pasado correctamenete" };
 };
 //Methods
 //===================================================================================================================================
@@ -173,15 +173,13 @@ app.put("/notes/:id", (req, res) => {
   const obtainTitle = verifyTitle(title);
   const obtainDesc = verifyDesc(desc);
   if (title === undefined && desc === undefined) {
-    return res
-      .status(400)
-      .json({
-        message: "Debe agregarse almenos una descripció o titulo a cambiar",
-      });
+    return res.status(400).json({
+      message: "Debe agregarse almenos una descripció o titulo a cambiar",
+    });
   }
 
   if (title !== undefined && desc === undefined) {
-    if (obtainTitle.data === null) {
+    if (obtainTitle.data === null ) {
       return res.status(400).json({ error: obtainTitle.message });
     }
     const index = notes.findIndex((note) => note.id === obtainId.data);
@@ -203,33 +201,36 @@ app.put("/notes/:id", (req, res) => {
     if (obtainTitle.data === null) {
       return res.status(400).json({ error: obtainTitle.message });
     }
-    if (obtainDesc === null) {
-      return res.status_(400).json({ error: obtainDesc.message });
+    if (obtainDesc.data === null) {
+      return res.status(400).json({ error: obtainDesc.message });
     }
-    const index = notes.findIndex((note) => note.id === obtainId);
+    const index = notes.findIndex((note) => note.id === obtainId.data);
+    console.log(index);
     notes[index].title = obtainTitle.data;
     notes[index].desc = obtainDesc.data;
     const modifyNote = notes[index];
     return res.json({ modifyNote });
   }
-  const resultDesc = verifyDesc(desc);
-
-  if (resultDesc.data === null) {
-    res.status(400).json({ error: resultDesc.message });
-    return;
-  }
 });
 
-app.delete("/notres/:id", (req, res) => {
+app.delete("/notes/:id", (req, res) => {
+  const listNote = verifyArray();
+  if (listNote === null) {
+    return res
+      .status(400)
+      .json({ message: "No existe la lista que esta intentado llamar" });
+  }
   const id = req.params.id;
   const obtainedId = verifyId(id);
   if (obtainedId === null) {
     return res.status(400).json({ message: obtainedId.message });
   }
-
-  if (!notes.find((note) => note.id === obtainedId.data)) {
-    return res.status(400).json({ message: obtainedId.mes});
+  const index = notes.findIndex((note) => note.id === obtainedId.data);
+  if (index === -1) {
+    return res.status(400).json({ message: "El Id no existe" });
   }
+  notes = notes.filter((note) => note.id !== obtainedId.data);
+  return res.json({ notes });
 });
 //===================================================================================================================================
 //Listening server
