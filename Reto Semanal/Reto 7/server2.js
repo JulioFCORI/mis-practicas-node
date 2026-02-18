@@ -134,14 +134,13 @@ app.post("/notes", (req, res) => {
   try {
     const newNote = {
       id: notes[notes.length - 1].id + 1,
-      title: resultTitle.data,
-      desc: resultDesc.data,
+      title: resultTitle,
+      desc: resultDesc,
     };
     notes.push(newNote);
     res.status(201).json({ message: "La nota se agrego con exito." });
-  } catch (error) {
+  }catch (error) {
     res.status(400).json({ error: error.message });
-    return;
   }
 });
 
@@ -225,4 +224,9 @@ app.delete("/notres/:id", (req, res) => {
   notes = notes.filter((note) => note.id !== obtainedId);
   res.json({ listNote });
 
+});
+//===================================================================================================================================
+//Listening server
+app.listen(3000, () => {
+  console.log(colors.green("Server is Executing in port 3000"));
 });
