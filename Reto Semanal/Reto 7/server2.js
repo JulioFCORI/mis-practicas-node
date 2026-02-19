@@ -129,9 +129,10 @@ app.post("/notes", (req, res) => {
   }
 
   const { title, desc } = req.body;
-  const resultTitle = verifyTitle(title);
-  const resultDesc = verifyDesc(desc);
+
   try {
+    const resultTitle = verifyTitle(title);
+    const resultDesc = verifyDesc(desc);
     const newNote = {
       id: notes[notes.length - 1].id + 1,
       title: resultTitle,
@@ -139,7 +140,7 @@ app.post("/notes", (req, res) => {
     };
     notes.push(newNote);
     res.status(201).json({ message: "La nota se agrego con exito." });
-  }catch (error) {
+  } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
@@ -207,13 +208,13 @@ app.put("/notes/:id", (req, res) => {
 });
 
 app.delete("/notres/:id", (req, res) => {
-    const listNote = verifyArray();
+  const listNote = verifyArray();
   if (listNote === null) {
     res
       .status(400)
       .json({ message: "No existe la lista que esta intentado llamar" });
   }
-  
+
   try {
     const id = req.params.id;
     const obtainedId = verifyId(id);

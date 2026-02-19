@@ -8,7 +8,7 @@ POST http://localhost:3000/notes
 Content-Type: application/json
 
 {
-    "title": "     Estudiar C#    ",
+    "title": "",
     "desc": "      Registrarme en el server de Disco C#        "
 }
 ### 3. Put Method
