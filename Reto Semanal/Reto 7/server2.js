@@ -98,7 +98,7 @@ const verifyId = (id) => {
 //Verify Index in Array
 const verifyIndex = (id) => {
   const index = notes.findIndex((note) => note.id === id);
-  if (!index) {
+  if ((index = undefined)) {
     throw new Error("El elemento buscado no esta en el array");
   }
   return index;
@@ -166,16 +166,17 @@ app.put("/notes/:id", (req, res) => {
 
   // Bring title and desc
   const { title, desc } = req.body;
-  const obtainTitle = verifyTitle(title);
-  const obtainDesc = verifyDesc(desc);
-  if (title === undefined && desc === undefined) {
+  console.log("Estoy antes de la verificavción doble")
+  if ((title === undefined && desc === undefined) || (title === "" && desc === "") || (!title && !desc)) {
     return res.status(400).json({
       message: "Debe agregarse almenos una descripció o titulo a cambiar",
     });
   }
 
   if (title !== undefined && desc === undefined) {
+    console.log("Entre al if 1");
     try {
+      const obtainTitle = verifyTitle(title);
       console.log(index);
       notes[index].title = obtainTitle;
     } catch (error) {
@@ -186,7 +187,9 @@ app.put("/notes/:id", (req, res) => {
     return res.status(201).json({ modifyNote });
   }
   if (title === undefined && desc !== undefined) {
+        console.log("Entre al if 1");
     try {
+      const obtainDesc = verifyDesc(desc);
       notes[index].desc = obtainDesc.data;
     } catch (error) {
       return res.status(400).json({ error: error.message });
@@ -196,7 +199,10 @@ app.put("/notes/:id", (req, res) => {
     return res.status(201).json({ modifyNote });
   }
   if (title !== undefined && desc !== undefined) {
+        console.log("Entre al if 1");
     try {
+      const obtainTitle = verifyTitle(title);
+      const obtainDesc = verifyDesc(desc);
       notes[index].title = obtainTitle;
       notes[index].desc = obtainDesc;
     } catch (error) {
@@ -224,7 +230,6 @@ app.delete("/notres/:id", (req, res) => {
   }
   notes = notes.filter((note) => note.id !== obtainedId);
   res.json({ listNote });
-
 });
 //===================================================================================================================================
 //Listening server
