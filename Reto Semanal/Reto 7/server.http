@@ -8,16 +8,17 @@ POST http://localhost:3000/notes
 Content-Type: application/json
 
 {
-    "title": "",
-    "desc": "      Registrarme en el server de Disco C#        "
+    "title": "  Inventario  ",
+    "desc": " Realizar inventario de uniformes  "
 }
 ### 3. Put Method
 # Rename a task
-PUT http://localhost:3000/api/tasks
+PUT http://localhost:3000/notes/4
 Content-Type: application/json
 
 {
-    "desc": "Hola Hi"
+    "title": "",
+    "desc": " Realizar limpieza profunda"
 }
 
 ### 4. Delete Method

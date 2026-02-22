@@ -98,7 +98,7 @@ const verifyId = (id) => {
 //Verify Index in Array
 const verifyIndex = (id) => {
   const index = notes.findIndex((note) => note.id === id);
-  if ((index = undefined)) {
+  if ((index === -1)) {
     throw new Error("El elemento buscado no esta en el array");
   }
   return index;
@@ -156,17 +156,19 @@ app.put("/notes/:id", (req, res) => {
     return;
   }
   //Verify and Bring ID
+  let index = "";
+  let obtainedId = "";
   try {
     let id = req.params.id;
-    const obtainId = verifyId(id);
-    const index = verifyIndex(obtainId);
+    obtainedId = verifyId(id);
+    index = verifyIndex(obtainedId);
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
 
   // Bring title and desc
-  const { title, desc } = req.body;
   console.log("Estoy antes de la verificavción doble")
+  const { title, desc } = req.body;
   if ((title === undefined && desc === undefined) || (title === "" && desc === "") || (!title && !desc)) {
     return res.status(400).json({
       message: "Debe agregarse almenos una descripció o titulo a cambiar",
@@ -187,10 +189,11 @@ app.put("/notes/:id", (req, res) => {
     return res.status(201).json({ modifyNote });
   }
   if (title === undefined && desc !== undefined) {
-        console.log("Entre al if 1");
+    console.log("Entre al if 2");
     try {
       const obtainDesc = verifyDesc(desc);
-      notes[index].desc = obtainDesc.data;
+      console.log(index);
+      notes[index].desc = obtainDesc;
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
@@ -199,7 +202,7 @@ app.put("/notes/:id", (req, res) => {
     return res.status(201).json({ modifyNote });
   }
   if (title !== undefined && desc !== undefined) {
-        console.log("Entre al if 1");
+    console.log("Entre al if 3");
     try {
       const obtainTitle = verifyTitle(title);
       const obtainDesc = verifyDesc(desc);
