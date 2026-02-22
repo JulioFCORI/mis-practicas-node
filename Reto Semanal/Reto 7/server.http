@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 ### 3. Put Method
 # Rename a task
-PUT http://localhost:3000/notes/4
+PUT http://localhost:3000/notes/2
 Content-Type: application/json
 
 {
@@ -24,4 +24,4 @@ Content-Type: application/json
 ### 4. Delete Method
 # Delete a task
 
-DELETE  http://localhost:3000/api/tasks/2
+DELETE  http://localhost:3000/notes/2

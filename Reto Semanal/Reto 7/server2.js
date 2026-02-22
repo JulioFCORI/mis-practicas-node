@@ -176,7 +176,6 @@ app.put("/notes/:id", (req, res) => {
   }
 
   if (title !== undefined && desc === undefined) {
-    console.log("Entre al if 1");
     try {
       const obtainTitle = verifyTitle(title);
       console.log(index);
@@ -189,7 +188,6 @@ app.put("/notes/:id", (req, res) => {
     return res.status(201).json({ modifyNote });
   }
   if (title === undefined && desc !== undefined) {
-    console.log("Entre al if 2");
     try {
       const obtainDesc = verifyDesc(desc);
       console.log(index);
@@ -202,7 +200,6 @@ app.put("/notes/:id", (req, res) => {
     return res.status(201).json({ modifyNote });
   }
   if (title !== undefined && desc !== undefined) {
-    console.log("Entre al if 3");
     try {
       const obtainTitle = verifyTitle(title);
       const obtainDesc = verifyDesc(desc);
@@ -216,7 +213,7 @@ app.put("/notes/:id", (req, res) => {
   }
 });
 
-app.delete("/notres/:id", (req, res) => {
+app.delete("/notes/:id", (req, res) => {
   const listNote = verifyArray();
   if (listNote === null) {
     res
@@ -224,15 +221,17 @@ app.delete("/notres/:id", (req, res) => {
       .json({ message: "No existe la lista que esta intentado llamar" });
   }
 
+
+  let obtainedId = "";
   try {
     const id = req.params.id;
-    const obtainedId = verifyId(id);
+    obtainedId = verifyId(id);
     const index = verifyIndex(obtainedId);
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
   notes = notes.filter((note) => note.id !== obtainedId);
-  res.json({ listNote });
+  res.json({ notes });
 });
 //===================================================================================================================================
 //Listening server
