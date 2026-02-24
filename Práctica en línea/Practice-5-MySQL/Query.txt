@@ -1,0 +1,17 @@
+CREATE DATABASE library;
+USE library;
+CREATE TABLE BOOKS(id INT PRIMARY KEY AUTO_INCREMENT, book VARCHAR(100), authbookbookor VARCHAR(100), dateIn DATE);
+
+USE library;
+SELECT * FROM BOOKS;
+
+USE library;
+INSERT INTO BOOKS (book,author) VALUES("El esclavo","Julio");
+
+USE library;
+UPDATE BOOKS SET title="?" WHERE id="?";
+
+USE library;
+DELETE FROM BOOKS WHERE id="?";
+
+SHOW DATABASES;
