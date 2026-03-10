@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 
 const sequelizeConnection = new Sequelize("biblioteca","Julio","MiPassword123",
     {
-        host: localhost,
+        host: "localhost",
         dialect: "mysql"
     }
 );
