@@ -1,6 +1,49 @@
 import Reservation from "../models/Reservation.js";
 import User from "../models/User.js";
 import Room from "../models/Room.js";
+
+export const getReservation = async (req, res) => {
+    try {
+        consr[user, room, startDate, endDate, page = 1, limit = 10] = req.query;
+        let filters = {};
+
+        if (user) filters.user = user;
+        if (room) filters.room = room;
+        if (startDate) filters.startDate = { $gte: new Date(startDate) };
+        if (endDate) filters.endDate = { $lte: new Date(endDate) };
+
+        const skip = Number(page - 1) * limit;
+
+        /*const reservation = await Reservation.find(filters)
+            .populate('User')
+            .populate('Cuarto')
+            .limit(Number(limit))
+            .skip();*/
+
+        //const count = await Reservation.countAll();
+
+        const [reservation, count] = await Promise.allSettled([Reservation.find(filters)
+            .populate("User")
+            .populate("Room")
+            .limit(Number(limit))
+            .skip(skip),
+        Reservation.countDocuments(filters)
+        ])
+
+
+        const response = {
+            items: reservation,
+            page: Number(page),
+            limit: Number(limit),
+            totalPages: Math.cell(count/limit),
+            count
+        };
+
+        res.status(200).json(response);
+    } catch (err) {
+
+    }
+}
 export const createReservation = async (req, res) => {
     try {
         const { userId, roomId, startDate, endDate, occupants } = req.body;
@@ -21,12 +64,13 @@ export const createReservation = async (req, res) => {
         if (room.maxCapacity < occupants) {
             return res.status(400).json({ message: 'El número de ocupantes no puede ser mayor a la capacidad maxima' });
         }
-        const conflict = await Reservation.findOne({room:roomId,
-            start:{$lte:end},
-            endDate:{$gte:startDate}
+        const conflict = await Reservation.findOne({
+            room: roomId,
+            start: { $lte: end },
+            endDate: { $gte: startDate }
         });
-        if(conflict){
-            return res.status(400).json({message: 'ya existe una reservación'});
+        if (conflict) {
+            return res.status(400).json({ message: 'ya existe una reservación' });
         }
 
         const reservation = new Reservation();
@@ -37,7 +81,7 @@ export const createReservation = async (req, res) => {
         reservation.occupants = occupants;
         await reservation.save()
 
-        res.status(201).json({message:'Reservación creada'});
+        res.status(201).json({ message: 'Reservación creada' });
     } catch (err) {
 
     }
