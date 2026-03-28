@@ -5,7 +5,7 @@ const adressSchema = new mongoose.Schema({
     ref:"User",
     required: true
     },
-    adress:{
+    address:{
     Type:String,
     required: true,
     trim:true
@@ -32,7 +32,7 @@ const adressSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    phon:{
+    phone:{
         type:String,
         required: true,
         trim: true
