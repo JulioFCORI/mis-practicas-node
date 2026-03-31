@@ -1,5 +1,7 @@
 import Cart from "../models/Cart";
 
+
+//User Admin
 async function getCarts(req, res, next){
     try{
         const carts = await Cart.find()
@@ -12,6 +14,7 @@ async function getCarts(req, res, next){
     }
 };
 
+//AnyUser
 async function getCartById(req,res){
     try{
         const id = req.params.id;
@@ -27,6 +30,7 @@ async function getCartById(req,res){
     }
 }
 
+//AnyUser
 async function getCartByUser(req, res, next){
     try{
         const userId = req.params.id;
@@ -42,6 +46,8 @@ async function getCartByUser(req, res, next){
     }
 }
 
+
+//AnyUser
 
 async function  createCart(req,res) {
     try{
@@ -114,4 +120,30 @@ async function deleteCart(req,res){
     }
 };
 
-export {getCarts,getCartById,getCartByUser,createCart,updateCart,deleteCart};
+async function addProductToCart(req,res,next){
+    try{
+        const {userId,productId,quantity=1} = req.body;
+        let cart = await Cart.findOne({user:userId});
+        if(!cart){
+            cart = new Cart(
+                {user:userId,products:[{productId,quantity}]}
+            );
+        }else{
+            const existingProductIndex = cart.products.findIndex((item)=>item.product.toString() === productId);
+            if(existingProductIndex>=0){
+                cart.products[existingProductsIndex].quantity += quantity;
+            }else{
+                cart.products.push({product:productId,quantity});
+            }
+        }
+        await cart.save();
+        await cart.populate("user");
+        await cart.populate("products.productId")
+            res.json(cart);
+
+    }catch(error){
+        next(error);
+    }
+}
+
+export {getCarts,getCartById,getCartByUser,createCart,updateCart,deleteCart,addProductToCart};

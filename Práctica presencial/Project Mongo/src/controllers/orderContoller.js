@@ -1,7 +1,7 @@
 import express from "express";
-import Order from "../models/Order";
+import Order from "../models/Order.js";
 
-const getOrders = async (req, res) => {
+const getOrders = async (req, res, next) => {
   try {
     const orders = await Order.find()
       .populate("User")
@@ -10,13 +10,13 @@ const getOrders = async (req, res) => {
       .populate("paymentMethod");
     res.json(orders);
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 };
 
-const getOrdersById = async (req, res) => {
+const getOrdersById = async (req, res, next) => {
   try {
-    const id = req.params.id;
+    const {id} = req.params.id;
     const order = await Order.findById(id)
       .populate("User")
       .populate("products.productId")
@@ -25,11 +25,12 @@ const getOrdersById = async (req, res) => {
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+    res.json(order);
   } catch (error) {
     console.error(error);
   }
 };
-const getOrderByUser = async (req, res) => {
+const getOrderByUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
     const order = await Order.findOne({ User: userId })
@@ -45,7 +46,7 @@ const getOrderByUser = async (req, res) => {
     console.error(error);
   }
 };
-const createOrder = async (req, res) => {
+const createOrder = async (req, res, next) => {
   try {
     const [
       user,
@@ -103,8 +104,8 @@ const createOrder = async (req, res) => {
     )
       await newOrder.populate("User");
       await newOrder.populate("products.productId");
-      await newOrder.populate("address");
-      await newOrder.populate("paymentMethod");
+      //await newOrder.populate("address");
+      //await newOrder.populate("paymentMethod");
 
       res.status(201).json(newOrder);
   } catch (error) {
@@ -113,15 +114,9 @@ const createOrder = async (req, res) => {
 };
 
 
-const updateOrder = async (req, res) => {
+const updateOrder = async (req, res, next) => {
   try {
     const [
-      user,
-      products,
-      address,
-      paymentMethod,
-      shippingCost,
-      totallPrice,
       status,
       paymentStatus,
     ] = req.body;
@@ -129,21 +124,14 @@ const updateOrder = async (req, res) => {
     const { id } = req.params;
 
     if (
-      !user ||
-      !products ||
-      !address ||
-      !paymentMethod ||
-      !shippingCost ||
-      !totallPrice ||
       !status ||
-      !paymentStatus ||
-      !Array.isArray(products)
+      !paymentStatus
     ) {
       return res.status(404).json({
         error: "Each field is required, and products must be an array ",
       });
     }
-    for (let i = 0; i < products.length; i++) {
+    /*for (let i = 0; i < products.length; i++) {
       if (
         !products[i].productId ||
         !products[i].quantity ||
@@ -155,17 +143,11 @@ const updateOrder = async (req, res) => {
           error: "Each product must have a product ID and quanty and price < 0",
         });
       }
-    }
+    }*/
 
     const updateOrder = await Order.findByIdAndUpdate(
       id,
       {
-        user,
-        products,
-        address,
-        paymentMethod,
-        shippingCost,
-        totallPrice,
         status,
         paymentStatus,
       },
@@ -186,7 +168,7 @@ const updateOrder = async (req, res) => {
   }
 };
 
-const deleteOrder = async(req, res) => {
+const deleteOrder = async(req, res, next) => {
   try {
     const {id} =req.params;
     const deletedOrder = await Cart.findByIdAndDelete(id);
